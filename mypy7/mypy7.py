@@ -1,17 +1,21 @@
-import ptbot
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 from pytimeparse import parse
+import ptbot
 
 
 load_dotenv()
 TG_TOKEN = os.getenv('TG_TOKEN')
 TG_CHAT_ID = os.getenv('TG_CHAT_ID')
 
+PROGRESS_BAR_LENGTH = 30  
+FILL_CHAR = '█'
+EMPTY_CHAR = '░'
+
 bot = ptbot.Bot(TG_TOKEN)
 
 
-def render_progressbar(total, iteration, prefix='', suffix='', length=30, fill='█', zfill='░'):
+def render_progressbar(total, iteration, prefix='', suffix='', length=PROGRESS_BAR_LENGTH, fill=FILL_CHAR, zfill=EMPTY_CHAR):
     iteration = min(total, iteration)
     percent = "{0:.1f}".format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
@@ -34,6 +38,8 @@ def on_message(chat_id, message):
     delay = parse(message)
     if delay is not None:
         wait(chat_id, delay)
+    else:
+        bot.send_message(chat_id, "Не удалось распознать время. Пожалуйста, введите корректное значение.")
 
 
 def send_timeout_message(chat_id):
