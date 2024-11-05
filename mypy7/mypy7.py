@@ -4,6 +4,10 @@ from pytimeparse import parse
 import ptbot
 
 
+TG_TOKEN = os.getenv('TG_TOKEN')
+TG_CHAT_ID = os.getenv('TG_CHAT_ID')
+
+
 def render_progressbar(total, iteration, prefix='', suffix='', length=30, fill='█', zfill='░'):
     iteration = min(total, iteration)
     percent = "{0:.1f}".format(100 * (iteration / float(total)))
@@ -35,8 +39,6 @@ def send_timeout_message(bot, chat_id):
 
 def main():
     load_dotenv()
-    TG_TOKEN = os.getenv('TG_TOKEN')
-    TG_CHAT_ID = os.getenv('TG_CHAT_ID')
     bot = ptbot.Bot(TG_TOKEN)
     bot.reply_on_message(lambda chat_id, message: on_message(bot, chat_id, message))
     bot.run_bot()
